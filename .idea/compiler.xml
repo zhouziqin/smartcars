@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="car-domain" />
+        <module name="car-iot-service" />
+        <module name="car-park-service" />
+        <module name="car-service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="car-common" target="1.8" />
+      <module name="car-domain" target="1.8" />
+      <module name="car-iot-service" target="1.8" />
+      <module name="car-park-service" target="1.8" />
+      <module name="car-service" target="1.8" />
+      <module name="smartcars" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

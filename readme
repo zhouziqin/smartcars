@@ -1,0 +1,7 @@
+需要安装的开发工具 java1.8 ， IntelliJ IDEA，apache-maven-3.2.3
+
+car-common  所有的工具包
+car-iot-service 对接所有的设备端通讯
+car-park-service 小程序服务
+car-service 之前和摄像头通讯模块
+car-domain 所有的数据库访问模块
