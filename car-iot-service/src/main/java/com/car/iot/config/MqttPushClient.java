@@ -1,5 +1,7 @@
 package com.car.iot.config;
 
+import com.domain.model.EventDataPayload;
+import net.sf.json.JSONObject;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
@@ -57,9 +59,18 @@ public class MqttPushClient {
      * @param pushMessage
      */
     public void publish(String topic,String pushMessage){
+
         publish(0, false, topic, pushMessage);
     }
+    /**
+     * 发布，默认qos为0，非持久化
+     * @param topic
+     * @param pushMessage
+     */
+    public void publish(String topic,EventDataPayload pushMessage){
 
+        publish(0, false, topic, JSONObject.fromObject(pushMessage).toString());
+    }
     /**
      * 发布
      * @param qos

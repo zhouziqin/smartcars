@@ -1,10 +1,12 @@
 package com.car.iot.config;
+import com.car.iot.infrastructure.service.CmdService;
 import com.domain.model.EventData;
-import com.domain.model.EventDataPayload;
-import com.mapper.EventDataPayloadMapper;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import net.sf.json.JsonConfig;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * 作者:zhouziqin
@@ -12,48 +14,45 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MqttDispatcher {
-    @Autowired
-    EventDataPayloadMapper eventDataPayloadMapper;
-    @Autowired
-    MqttPushClient mqttPushClient;
-    private static String topic = "";
-    /**
+
+    CmdService cmdService;
+     /**
      * 这里执行业务
      * @param data
      */
     public void execute(String topic,String data){
-        //JSONObject jsonObject;
+        System.out.println("topic:"+topic + ",data:"+data);
         try{
            JSONObject jsonObject =  JSONObject.fromObject(data);
-           JSONObject dataJson =jsonObject.getJSONObject("data");
-           String type  =jsonObject.getString("type");
-           String backup  =jsonObject.getString("backup");
-           String time  =jsonObject.getString("time");
-            EventDataPayload eventDataPayLoad = (EventDataPayload) JSONObject.toBean(jsonObject,EventDataPayload.class);
-           EventData eventData= (EventData) JSONObject.toBean(dataJson, EventData.class);
-            eventDataPayloadMapper.insert(eventDataPayLoad);
+            String type  =jsonObject.getString("type");
+            String backup  =jsonObject.getString("backup");
+            String time  =jsonObject.getString("time");
+            JSONObject dataJson =null;
+            EventData eventData= null;
+            JSONArray dataArray = null;
+            List<EventData> eventDataList = null;
+            if(type.equals("002")){
+                dataArray = jsonObject.getJSONArray("data");
+                eventDataList = JSONArray.toList(dataArray,new EventData(),new JsonConfig());
+            }else{
+                dataJson =jsonObject.getJSONObject("data");
+                eventData= (EventData) JSONObject.toBean(dataJson, EventData.class);
+            }
 
-       if(type.equals("001")){
-           mqttPushClient.publish(topic,"test");
-       }else if(type.equals("002")){
 
-       }else if(type.equals("003")){
+            if(type.equals("001")){
+                cmdService.upCarStatusChange(eventData,jsonObject);
+              }else if(type.equals("002")){
+                cmdService.upAllCarStatusChange(eventDataList,jsonObject);
+               }else if(type.equals("003")){
+                cmdService.upErrorMsg(eventData,jsonObject);
+               } else if(type.equals("008")){
+                cmdService.plateInfo(eventData,jsonObject);
 
-       }else if(type.equals("004")){
+               }else if(type.equals("009")){
+                cmdService.ctrlRe(eventData,jsonObject);
 
-       }else if(type.equals("005")){
-
-       }else if(type.equals("006")){
-
-       }else if(type.equals("007")){
-
-       }else if(type.equals("008")){
-
-       }else if(type.equals("009")){
-
-       }else if(type.equals("010")){
-
-       }
+               }
      }catch (Exception e){}
         System.out.println(data);
 

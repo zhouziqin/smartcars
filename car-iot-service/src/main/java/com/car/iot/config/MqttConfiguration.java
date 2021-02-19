@@ -12,6 +12,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(MqttConfiguration.PREFIX)
 public class MqttConfiguration {
+    /**
+     * 订阅的
+     */
+    public final static String SUB_TOPIC = "sub_topic";
+    /**
+     * 发布
+     */
+    public final static String PUB_TOPIC = "pub_topic";
     @Autowired
     private MqttPushClient mqttPushClient;
 
@@ -84,7 +92,7 @@ public class MqttConfiguration {
     public MqttPushClient getMqttPushClient() {
         System.out.println("start collection ");
         mqttPushClient.connect(host, clientid, username, password, timeout, keepalive);
-        mqttPushClient.subscribe("testtopic");
+        mqttPushClient.subscribe(SUB_TOPIC);
         return mqttPushClient;
     }
 }
